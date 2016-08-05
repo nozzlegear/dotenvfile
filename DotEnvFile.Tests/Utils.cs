@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,6 @@ namespace DotEnvFile.Tests
             new KeyValuePair<string, string>("SixthKey", "SixthValue")
         };
 
-        public static string PathToTestFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "./Test.env";
+        public static string PathToTestFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "./Test.env");
     }
 }
