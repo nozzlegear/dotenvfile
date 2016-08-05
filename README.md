@@ -1,8 +1,12 @@
 # DotEnvFile
 
+[![Build Status](https://travis-ci.org/nozzlegear/dotenvfile.svg?branch=master)](https://travis-ci.org/nozzlegear/dotenvfile)
+[![NuGet](https://img.shields.io/nuget/v/dotenvfile.svg?maxAge=3600)](https://www.nuget.org/packages/dotenvfile/)
+[![license](https://img.shields.io/github/license/nozzlegear/dotenvfile.svg?maxAge=3600)](https://github.com/nozzlegear/dotenvfile/blob/master/LICENSE)
+
 DotEnvFile is a small .NET utility for parsing environment variables from `.env` files and optionally injecting them into the current environment.
 
-### Installation
+## Installation
 
 You can download DotEnvFile from NuGet with NuGet package manager:
 
@@ -16,7 +20,7 @@ Or via [Paket](https://github.com/fsprojects/paket):
 paket add nuget DotEnvFile
 ```
 
-### File formatting
+## File formatting
 
 DotEnvFile expects your file to contain one variable per line, with each variable formatted in the scheme `Key:Value`, `Key=Value`, or `Key Value`. It will try to be forgiving by ignoring extra whitespace and empty lines.
 
@@ -29,22 +33,22 @@ ThirdKey ThirdValue
 FourthKey : FourthValue
 ``` 
 
-### Usage
+## Usage
 
-Load environment variables from your file:
+### Load environment variables from your file:
 
 ```cs
 string pathToFile = "/path/to/file.env";
 Dictionary<string, string> variables = DotEnvFile.LoadFile(pathToFile);
 ```
 
-Parse a single line:
+### Parse a single line:
 
 ```cs
 KeyValuePair<string, string> variable = DotEnvFile.ParseLine("MyKey=MyValue");
 ```
 
-Inject the variables into your environment:
+### Inject the variables into your environment:
 
 ```cs
 DotEnvFile.InjectIntoEnvironment(variables);
@@ -52,7 +56,7 @@ DotEnvFile.InjectIntoEnvironment(variables);
 Console.WriteLine(Environment.GetEnvironmentVariable("MyKey")); // "MyValue"
 ```
 
-Remove the variables from your environment:
+### Remove the variables from your environment:
 
 ```cs
 DotEnvFile.RemoveFromEnvironment(variables);
