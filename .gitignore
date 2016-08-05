@@ -188,3 +188,6 @@ wwwroot/
 
 # Ignore paket.exe
 paket.exe
+
+# Ignore built nuget files
+*.nupkg
