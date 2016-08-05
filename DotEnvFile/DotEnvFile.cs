@@ -17,11 +17,17 @@ namespace DotEnvFile
         /// Attempts to load a file at the given <see cref="path"/> and parse it into a <see cref="Dictionary{string, string}"/> object. Will throw a <see cref="FileNotFoundException"/> exception if the file can't be found.
         /// </summary>
         /// <param name="path">The path to load the file from.</param>
-        public static Dictionary<string, string> LoadFile(string path)
+        /// <exception cref="FileNotFoundException">
+        /// Thrown when the filepath cannot be resolved.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown when <see cref="throwOnInvalidValues"/> is false and a line is empty or does not contain valid separators.
+        /// </exception>
+        public static Dictionary<string, string> LoadFile(string path, bool throwOnInvalidValues = false)
         {
             if (File.Exists(path) == false)
             {
-                throw new FileNotFoundException($"DotEnvFile: File not found at {path}");
+                throw new FileNotFoundException($"File not found at {path}");
             }
 
             var lines = File.ReadAllLines(path);
@@ -29,9 +35,19 @@ namespace DotEnvFile
 
             foreach (var line in lines)
             {
-                var kvp = ParseLine(line);
+                try
+                {
+                    var kvp = ParseLine(line);
 
-                kvps.Add(kvp.Key, kvp.Value);
+                    kvps.Add(kvp.Key, kvp.Value);
+                }
+                catch (FormatException)
+                {
+                    if (throwOnInvalidValues)
+                    {
+                        throw;
+                    }
+                }
             }
 
             return kvps;
@@ -42,13 +58,16 @@ namespace DotEnvFile
         /// </summary>
         /// <example>DotEnvFile.ParseLine("MyKey=MyValue")</example>
         /// <param name="line">The line string to parse.</param>
+        /// <exception cref="FormatException">
+        /// Thrown when a line is empty or does not contain valid separators.
+        /// </exception>
         public static KeyValuePair<string, string> ParseLine(string line)
         {
             var regex = new Regex("( *: *)|( *= *)|( +)", RegexOptions.IgnoreCase);
 
             if (!regex.IsMatch(line))
             {
-                throw new FormatException("Line does not contain valid separators. Valid separators include ':', '=' and spaces.");
+                throw new FormatException($"Line does not contain valid separators. Valid separators are ':', '=' and spaces. Line value was {line}");
             }
 
             // Split the line into 2 parts: the key and the value.
@@ -57,6 +76,9 @@ namespace DotEnvFile
             return new KeyValuePair<string, string>(parts.First().Trim(), parts.Last().Trim());
         }
 
+        /// <summary>
+        /// Takes a <see cref="Dictionary{string, string}"/> of values and injects them into the environment, making them accessible via <see cref="Environment.GetEnvironmentVariable(string)"/>.
+        /// </summary>
         public static void InjectIntoEnvironment(Dictionary<string, string> variables, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             foreach (var kvp in variables)
@@ -65,6 +87,9 @@ namespace DotEnvFile
             }
         }
 
+        /// <summary>
+        /// Removes environment variables injected by <see cref="InjectIntoEnvironment(Dictionary{string, string}, EnvironmentVariableTarget)"/>.
+        /// </summary>
         public static void RemoveFromEnvironment(Dictionary<string, string> variables, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             foreach (var kvp in variables)
