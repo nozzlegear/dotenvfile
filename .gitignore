@@ -191,3 +191,6 @@ paket.exe
 
 # Ignore built nuget files
 *.nupkg
+
+# Jetbrains
+.idea
