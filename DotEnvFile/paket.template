@@ -1,0 +1,10 @@
+type project
+version 2.0.0
+authors Nozzlegear Software
+owners Nozzlegear Software
+projectUrl https://github.com/nozzlegear/dotenvfile
+licenseUrl https://raw.githubusercontent.com/nozzlegear/DotEnvFile/master/LICENSE
+requireLicenseAcceptance false
+tags environment process variables envfile env
+description 
+    A dotnet library for parsing .env files and optionally injecting their variables into the environment.
