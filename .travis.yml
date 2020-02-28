@@ -1,7 +1,8 @@
 language: csharp
 solution: DotEnvFile.sln
-install: 
-    - nuget restore DotEnvFile.sln
+mono: none
+dotnet: 3.1.101
 script:
-    - xbuild /p:Configuration=Release DotEnvFile.sln
-    - mono ./DotEnvFile.Tests/Harness/mspec.exe ./DotEnvFile.Tests/bin/Release/DotEnvFile.dll
+    - dotnet restore
+    - dotnet build
+    - dotnet test
