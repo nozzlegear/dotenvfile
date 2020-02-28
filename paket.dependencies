@@ -2,7 +2,7 @@ source https://api.nuget.org/v3/index.json
 
 storage: none
 nuget coverlet.collector 1.0.1
-nuget FSharp.Core
+nuget FSharp.Core >= 4.1
 nuget Microsoft.NET.Test.Sdk 16.2.0
 nuget xunit 2.4.0
 nuget xunit.runner.visualstudio 2.4.0
