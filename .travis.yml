@@ -3,6 +3,7 @@ solution: DotEnvFile.sln
 mono: none
 dotnet: 3.1.101
 script:
+    - dotnet tool install -g paket
     - dotnet restore
     - dotnet build
     - dotnet test
